@@ -8,6 +8,6 @@ jobs:
       - uses: actions/check@v2
       - name: build and test
         run: |
-          rsyc -av ./ /root/ros2_ws/src/mypkg/
+          rsync -av ./ /root/ros2_ws/src/mypkg/
           cd /root/ros2_ws
           bash -xv ./src/mypkg/test/test.bash /root
