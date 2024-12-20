@@ -1,4 +1,17 @@
-- name: Debug log
-  run: |
-    cat /tmp/mypkg.log
-    grep 'Listen: 10' /tmp/mypkg.log || echo "Not found"
+name: test
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    container: ryuichiueda/ubuntu22.04-ros2:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build and test
+        run: |
+          rsync -av ./ /root/ros2_ws/src/mypkg/
+          cd /root/ros2_ws
+          bash -xv ./src/mypkg/test/test.bash /root
+      - name: Debug log
+        run: |
+          cat /tmp/mypkg.log
+          grep 'Listen: 10' /tmp/mypkg.log || echo "Not found"
