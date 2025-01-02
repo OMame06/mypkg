@@ -1,41 +1,40 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int16
+import datetime
 
-class Talker(Node):
+
+#クラス
+#クラス内はみんな家族
+class Limit(Node):
     def __init__(self):
-        super().__init__("talker")
+        super().__init__("year_limit")
         self.pub = self.create_publisher(Int16, "countup", 10)
-        self.create_timer(0.5, self.cb)
-        self.n = 0
+        self.timer = self.create_timer(1.0, self.year_limit)
 
 
-    def cb(self):
+    def calculation(self):
+        now  = datetime.datetime.now()
+        new  = datetime.datetime(year=now.year,month=1,  day=1,  hour=1,  minute=1,  second=1 )
+        last = datetime.datetime(year=now.year,month=12, day=31, hour=23, minute=59, second=59)
+        minute_limit =int((last - now).total_seconds())
+
+        difn = (now - new).total_seconds()
+        difl = (last - new).total_seconds()
+        int_percent = (difn / difl)*100
+        return minute_limit,int_percent
+
+
+    def year_limit(self):
+        result = self.calculation()
+        limit = result[0]
+        percent = result[1]
         msg = Int16()
-        msg.data = self.n
         self.pub.publish(msg)
-        self.n += 1
+        self.get_logger().info(f"1年の経過パーセンテージ:{percent:.2f}% | 残り時間(秒):{limit}")
 
 
 def main():
     rclpy.init()
-    node = Talker()
+    node = Limit()
     rclpy.spin(node)
-
-#rclpy.init()
-#node = Node("talker")
-#pub = node.create_publisher(Int16, "countup", 10)
-#n = 0
-
-
-#def cb():
-#    global n
-#    msg = Int16()
-#    msg.data = n
-#    pub.publish(msg)
-#    n += 1
-
-
-#def main():
-#    node.create_timer(0.5, cb)
-#    rclpy.spin(node)
