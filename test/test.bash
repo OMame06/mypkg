@@ -6,4 +6,4 @@ dir=~
 cd $dir/ros2_ws
 colcon build
 source $dir/.bashrc
-timeout 10 ros2 run mypkg talker > /tmp/mypkg.log
+timeout 10 ros2 run mypkg year_count > /tmp/mypkg.log
