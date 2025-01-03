@@ -9,7 +9,7 @@ import datetime
 class Limit(Node):
     def __init__(self):
         super().__init__("year_limit")
-        self.pub = self.create_publisher(Int16, "countup", 10)
+        self.pub = self.create_publisher(Int16, "year_limit", 10)
         self.timer = self.create_timer(1.0, self.year_limit)
 
 
